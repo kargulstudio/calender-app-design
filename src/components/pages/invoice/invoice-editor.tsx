@@ -203,7 +203,7 @@ function EditorForm({ invoiceId, onDone }: { invoiceId?: string; onDone: () => v
                 <Button
                   key={n}
                   type="button"
-                  className="h-8 shrink-0 px-2"
+                  className="h-9 shrink-0 px-2.5"
                   onClick={() => set("dueDate", addDays(draft.issueDate, n))}
                 >
                   Net {n}
@@ -272,8 +272,8 @@ function EditorForm({ invoiceId, onDone }: { invoiceId?: string; onDone: () => v
                 <Button
                   type="button"
                   variant="ghost"
-                  size="icon-sm"
-                  className="max-sm:col-start-3 max-sm:row-start-1 max-sm:size-8 max-sm:justify-self-end"
+                  size="icon"
+                  className="size-9 max-sm:col-start-3 max-sm:row-start-1 max-sm:size-9 max-sm:justify-self-end"
                   aria-label={`Remove line ${idx + 1}`}
                   disabled={draft.items.length === 1}
                   onClick={() => set("items", draft.items.filter((x) => x.id !== l.id))}
@@ -285,8 +285,7 @@ function EditorForm({ invoiceId, onDone }: { invoiceId?: string; onDone: () => v
             <div className="flex items-center justify-between gap-3 max-sm:items-start max-sm:pt-1 sm:border-t sm:border-subtle sm:bg-app sm:px-2 sm:py-2">
               <Button
                 type="button"
-                size="sm"
-                className="max-sm:h-10 max-sm:px-3"
+                className="h-9 px-3 max-sm:h-10 max-sm:px-3"
                 onClick={() => set("items", [...draft.items, blankLine()])}
               >
                 <PlusIcon /> Add line
@@ -312,7 +311,7 @@ function EditorForm({ invoiceId, onDone }: { invoiceId?: string; onDone: () => v
         </Field>
       </div>
 
-      <DialogFooter className="m-0 rounded-b-xl border-t border-hairline bg-app px-5 py-3 max-sm:rounded-none max-sm:px-4 max-sm:pb-[max(12px,env(safe-area-inset-bottom))] max-sm:flex-row max-sm:flex-wrap max-sm:[&_button]:h-10 max-sm:[&_button]:flex-1 sm:items-center">
+      <DialogFooter className="m-0 rounded-b-xl border-t border-hairline bg-app px-5 py-3 [&_button]:h-9 max-sm:rounded-none max-sm:px-4 max-sm:pb-[max(12px,env(safe-area-inset-bottom))] max-sm:flex-row max-sm:flex-wrap max-sm:[&_button]:h-10 max-sm:[&_button]:flex-1 sm:items-center">
         {touched && error ? (
           <p className="t-12 mr-auto leading-[1.3] text-danger max-sm:basis-full" role="alert">
             {error}

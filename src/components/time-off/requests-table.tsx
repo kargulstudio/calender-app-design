@@ -157,10 +157,10 @@ export function RequestsTable({
       aria-label="Leave and requests"
       className="flex w-full shrink-0 scroll-mt-0 flex-col overflow-hidden border-t border-hairline bg-surface pb-[env(safe-area-inset-bottom)]"
     >
-      <div className="flex w-full shrink-0 flex-wrap items-center gap-2 overflow-hidden px-4 max-md:gap-y-3 max-md:py-3 md:h-14">
-        <h2 className="t-16 salt min-w-0 flex-1 text-heading max-md:basis-full">Leave and requests</h2>
-        <div className="flex items-center gap-2 max-md:w-full">
-          <label className="flex h-8 w-60 items-center gap-2 max-md:w-auto max-md:flex-1 rounded-lg border border-control bg-surface px-2.5 transition-[border-color,box-shadow] duration-150 focus-within:border-brand/60 focus-within:ring-3 focus-within:ring-brand/15">
+      <div className="flex w-full shrink-0 flex-col sm:flex-row items-start sm:items-center justify-between gap-3 flex-wrap overflow-hidden px-4 py-3 md:h-14">
+        <h2 className="t-16 salt shrink-0 text-heading">Leave and requests</h2>
+        <div className="flex items-center gap-2 max-sm:w-full" data-toolbar>
+          <label className="flex h-8 w-60 items-center gap-2 max-sm:w-auto max-sm:flex-1 rounded-lg border border-control bg-surface px-2.5 transition-[border-color,box-shadow] duration-150 focus-within:border-brand/60 focus-within:ring-3 focus-within:ring-brand/15">
             <Icon name="search" />
             <input
               type="search"
@@ -168,7 +168,7 @@ export function RequestsTable({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search"
               aria-label="Search requests"
-              className="t-14 min-w-0 flex-1 bg-transparent text-fg outline-none placeholder:text-fg-2 [&::-webkit-search-cancel-button]:hidden"
+              className="text-base sm:text-sm md:t-14 min-w-0 flex-1 bg-transparent text-fg outline-none placeholder:text-fg-2 [&::-webkit-search-cancel-button]:hidden"
             />
             {query && (
               <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="press text-icon hover-fine:text-fg">
@@ -188,57 +188,59 @@ export function RequestsTable({
         </div>
       </div>
 
-      <div role="table" aria-rowcount={rows.length} className="w-full max-md:border-t max-md:border-hairline">
-        <div
-          role="row"
-          className="flex h-10 w-full items-center gap-4 overflow-hidden border-y border-hairline bg-app px-4 max-md:hidden"
-        >
-          {COLUMNS.map((c) =>
-            c.key === "notes" ? (
-              <div key={c.key} role="columnheader" className="t-14 min-w-0 flex-1 text-fg-2">
-                {c.label}
-              </div>
-            ) : (
-              <button
-                key={c.key}
-                type="button"
-                role="columnheader"
-                aria-sort={sort?.key === c.key ? (sort.dir === 1 ? "ascending" : "descending") : "none"}
-                onClick={() => toggleSort(c.key as SortKey)}
-                className="t-14 group flex shrink-0 items-center gap-1 text-left text-fg-2 outline-none hover-fine:text-fg focus-visible:text-fg"
-                style={{ width: c.width }}
-              >
-                {c.label}
-                {sort?.key === c.key &&
-                  (sort.dir === 1 ? <ArrowUpIcon className="size-3 text-fg" /> : <ArrowDownIcon className="size-3 text-fg" />)}
-              </button>
-            ),
-          )}
-          <div className="h-5 w-8 shrink-0" aria-hidden />
-        </div>
-
-        {rows.map((r) => (
-          <RequestRow key={r.id} request={r} />
-        ))}
-
-        {rows.length === 0 && (
-          <div className="flex flex-col items-center gap-2 py-12 text-center">
-            <SearchXIcon className="size-5 text-icon" />
-            <p className="t-14 text-fg">No requests match</p>
-            <p className="t-12 text-fg-2">Try a different search or reset the filters.</p>
-            <Button
-              size="sm"
-              className="mt-1"
-              onClick={() => {
-                setQuery("");
-                setSort(null);
-                onFiltersChange(DEFAULT_FILTERS);
-              }}
-            >
-              Reset
-            </Button>
+      <div className="table-scroll w-full min-w-0 overflow-x-auto scroll-thin max-md:border-t max-md:border-hairline">
+        <div role="table" aria-rowcount={rows.length} className="w-full min-w-0 md:min-w-[760px]">
+          <div
+            role="row"
+            className="flex h-10 w-full items-center gap-3 overflow-hidden border-y border-hairline bg-app px-4 max-md:hidden"
+          >
+            {COLUMNS.map((c) =>
+              c.key === "notes" ? (
+                <div key={c.key} role="columnheader" className="t-14 min-w-0 flex-1 px-3 text-fg-2">
+                  {c.label}
+                </div>
+              ) : (
+                <button
+                  key={c.key}
+                  type="button"
+                  role="columnheader"
+                  aria-sort={sort?.key === c.key ? (sort.dir === 1 ? "ascending" : "descending") : "none"}
+                  onClick={() => toggleSort(c.key as SortKey)}
+                  className="t-14 group flex h-full shrink-0 items-center gap-1 px-3 text-left text-fg-2 outline-none hover-fine:text-fg focus-visible:text-fg"
+                  style={{ width: c.width }}
+                >
+                  {c.label}
+                  {sort?.key === c.key &&
+                    (sort.dir === 1 ? <ArrowUpIcon className="size-3 text-fg" /> : <ArrowDownIcon className="size-3 text-fg" />)}
+                </button>
+              ),
+            )}
+            <div className="w-12 shrink-0 text-right" aria-hidden />
           </div>
-        )}
+
+          {rows.map((r) => (
+            <RequestRow key={r.id} request={r} />
+          ))}
+
+          {rows.length === 0 && (
+            <div className="flex flex-col items-center gap-2 py-12 text-center">
+              <SearchXIcon className="size-5 text-icon" />
+              <p className="t-14 text-fg">No requests match</p>
+              <p className="t-12 text-fg-2">Try a different search or reset the filters.</p>
+              <Button
+                size="sm"
+                className="mt-1"
+                onClick={() => {
+                  setQuery("");
+                  setSort(null);
+                  onFiltersChange(DEFAULT_FILTERS);
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -264,7 +266,7 @@ function RequestRow({ request: r }: { request: LeaveRequest }) {
         if ((e.target as HTMLElement).closest("button,[role=menuitem]")) return;
         openOverlay({ kind: "request-details", requestId: r.id });
       }}
-      className="flex h-14 w-full cursor-pointer items-center gap-4 overflow-hidden border-b border-subtle px-4 transition-colors duration-150 hover-fine:bg-app/70 max-md:h-auto max-md:items-start max-md:gap-3 max-md:py-3 max-md:active:bg-app"
+      className="flex h-14 w-full cursor-pointer items-center gap-3 overflow-hidden border-b border-subtle px-4 transition-colors duration-150 hover-fine:bg-app/70 max-md:h-auto max-md:items-start max-md:gap-3 max-md:py-3 max-md:active:bg-app"
     >
       {/* Phones: a stacked card instead of six columns */}
       <div role="cell" className="grid min-w-0 flex-1 gap-1.5 md:hidden">
@@ -279,26 +281,26 @@ function RequestRow({ request: r }: { request: LeaveRequest }) {
         <p className="t-12 line-clamp-2 leading-[1.35] text-fg-2">{r.notes}</p>
       </div>
       <div className="contents max-md:hidden">
-      <div role="cell" className="flex w-28 shrink-0 items-center overflow-hidden">
-        <StatusBadge status={r.status} />
+        <div role="cell" className="flex w-28 shrink-0 items-center overflow-hidden px-3">
+          <StatusBadge status={r.status} />
+        </div>
+        <div role="cell" className="t-14 w-[120px] shrink-0 truncate px-3 text-table">
+          {r.type}
+        </div>
+        <div role="cell" className="t-14 w-[140px] shrink-0 truncate px-3 text-table">
+          {r.duration}
+        </div>
+        <div role="cell" className="t-14 w-[140px] shrink-0 truncate px-3 text-table">
+          {formatLong(r.from)}
+        </div>
+        <div role="cell" className="t-14 w-[140px] shrink-0 truncate px-3 text-table">
+          {formatLong(r.to)}
+        </div>
+        <div role="cell" className="t-14 min-w-0 flex-1 overflow-hidden px-3 text-table">
+          <span className="block truncate">{r.notes}</span>
+        </div>
       </div>
-      <div role="cell" className="t-14 w-[120px] shrink-0 truncate text-table">
-        {r.type}
-      </div>
-      <div role="cell" className="t-14 w-[140px] shrink-0 truncate text-table">
-        {r.duration}
-      </div>
-      <div role="cell" className="t-14 w-[140px] shrink-0 truncate text-table">
-        {formatLong(r.from)}
-      </div>
-      <div role="cell" className="t-14 w-[140px] shrink-0 truncate text-table">
-        {formatLong(r.to)}
-      </div>
-      <div role="cell" className="t-14 min-w-0 flex-1 truncate text-table">
-        {r.notes}
-      </div>
-      </div>
-      <div role="cell" className="shrink-0">
+      <div role="cell" className="flex w-12 shrink-0 items-center justify-end text-right">
         <DropdownMenu>
           <Tooltip>
             <TooltipTrigger asChild>

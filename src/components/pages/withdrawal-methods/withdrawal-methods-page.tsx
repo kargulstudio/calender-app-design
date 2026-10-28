@@ -74,12 +74,12 @@ export function WithdrawalMethodsPage() {
       <header className="sticky top-0 z-10 flex min-h-[68px] shrink-0 items-center gap-3 border-b border-hairline bg-surface px-4 py-3 md:h-[68px] md:py-0">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <h2 className="t-16 text-fg">Withdrawal methods</h2>
-          <p className="t-14 leading-[1.3] text-fg-2 md:truncate md:leading-none">Where your invoice payments are paid out</p>
+          <p className="t-14 max-w-[62ch] leading-[1.3] text-fg-2 md:truncate md:leading-none" style={{ maxWidth: "35em" }}>Where your invoice payments are paid out</p>
         </div>
         {/* Phones: icon-only, so the title keeps the room */}
         <Button
           variant="brand"
-          className="max-md:size-10 max-md:p-0"
+          className="h-9 px-3.5 max-md:size-10 max-md:p-0"
           onClick={() => setAdding((a) => ({ open: true, session: a.session + 1 }))}
         >
           <PlusIcon className="max-md:size-4" /> <span className="max-md:sr-only">Add method</span>
@@ -102,7 +102,7 @@ export function WithdrawalMethodsPage() {
                 <p className="t-14 text-fg">No withdrawal methods</p>
                 <p className="t-14 text-fg-2">Add one so we know where to send your payouts.</p>
               </div>
-              <Button onClick={() => setAdding((a) => ({ open: true, session: a.session + 1 }))}>
+              <Button className="h-9 px-3.5" onClick={() => setAdding((a) => ({ open: true, session: a.session + 1 }))}>
                 <PlusIcon /> Add method
               </Button>
             </div>
@@ -138,13 +138,13 @@ export function WithdrawalMethodsPage() {
                   <MethodMenu method={m} onMakeDefault={() => makeDefault(m)} onRemove={() => setRemoveId(m.id)} />
                   <div className="flex w-[132px] shrink-0 items-center justify-end gap-0.5 max-md:hidden">
                     {!m.isDefault && (
-                      <Button size="sm" className="px-2" onClick={() => makeDefault(m)}>
+                      <Button className="h-9 px-3" onClick={() => makeDefault(m)}>
                         Set default
                       </Button>
                     )}
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon-sm" aria-label={`Remove ${m.label}`} onClick={() => setRemoveId(m.id)}>
+                        <Button variant="ghost" size="icon" className="size-9" aria-label={`Remove ${m.label}`} onClick={() => setRemoveId(m.id)}>
                           <Trash2Icon />
                         </Button>
                       </TooltipTrigger>
@@ -157,16 +157,16 @@ export function WithdrawalMethodsPage() {
           )}
         </section>
 
-        <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-1">
+        <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-1" role="figure">
           <section className="overflow-hidden rounded-xl border border-hairline bg-surface">
-            <div className="flex h-12 items-center gap-2 border-b border-hairline px-4">
-              <CalendarClockIcon className="size-3.5 text-icon" />
+            <div className="flex h-12 items-center gap-3.5 border-b border-hairline px-4">
+              <CalendarClockIcon className="size-4 shrink-0 text-icon" />
               <h3 className="t-14 text-fg">Payout schedule</h3>
             </div>
             <div className="flex flex-col gap-4 p-4">
               <div className="flex items-center gap-3">
                 <span className="flex w-11 shrink-0 flex-col items-center gap-1 rounded-md bg-[var(--event-purple-bg)] py-1.5 text-[var(--event-purple-fg)]">
-                  <span className="text-[10px] leading-none tracking-wide uppercase">{formatShort(nextPayout).slice(0, 3)}</span>
+                  <span className="t-12 leading-none font-medium tracking-wide uppercase">{formatShort(nextPayout).slice(0, 3)}</span>
                   <span className="t-16">{Number(nextPayout.slice(8))}</span>
                 </span>
                 <div className="flex min-w-0 flex-col gap-1.5">
@@ -198,8 +198,8 @@ export function WithdrawalMethodsPage() {
           </section>
 
           <section className="overflow-hidden rounded-xl border border-hairline bg-surface">
-            <div className="flex h-12 items-center gap-2 border-b border-hairline px-4">
-              <ArrowDownToLineIcon className="size-3.5 text-icon" />
+            <div className="flex h-12 items-center gap-3.5 border-b border-hairline px-4">
+              <ArrowDownToLineIcon className="size-4 shrink-0 text-icon" />
               <h3 className="t-14 flex-1 text-fg">Recent payouts</h3>
               <span className="t-12 text-fg-2">From paid invoices</span>
             </div>

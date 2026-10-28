@@ -72,7 +72,7 @@ export function InvoicePage() {
         <div className="flex min-w-0 items-center gap-3 md:flex-1">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <h2 className="t-16 text-fg">Invoices</h2>
-            <p className="t-14 truncate text-fg-2">
+            <p className="t-14 max-w-[62ch] truncate text-fg-2" style={{ maxWidth: "35em" }}>
               {invoices.length} {invoices.length === 1 ? "invoice" : "invoices"} · {formatTotals(stats.outstanding)} outstanding
             </p>
           </div>
@@ -81,7 +81,7 @@ export function InvoicePage() {
           </Button>
         </div>
         <div className="flex items-center gap-2 md:gap-3">
-          <label className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-lg border border-control bg-surface px-2.5 transition-[border-color,box-shadow] duration-150 focus-within:border-brand/60 focus-within:ring-3 focus-within:ring-brand/15 md:h-[30px] md:w-56 md:flex-none">
+          <label className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-lg border border-control bg-surface px-2.5 transition-[border-color,box-shadow] duration-150 focus-within:border-brand/60 focus-within:ring-3 focus-within:ring-brand/15 md:h-9 md:w-56 md:flex-none">
             <Icon name="search" />
             <input
               type="search"
@@ -123,7 +123,7 @@ export function InvoicePage() {
             />
           </div>
           <Select value={status} onValueChange={(v) => setStatus(v as StatusFilter)}>
-            <SelectTrigger size="sm" className="h-[30px] w-[132px] max-md:hidden" aria-label="Filter by status">
+            <SelectTrigger className="w-[132px] max-md:hidden" style={{ minHeight: "36px", height: "36px" }} aria-label="Filter by status">
               <Icon name="filter" />
               <SelectValue />
             </SelectTrigger>
@@ -137,7 +137,7 @@ export function InvoicePage() {
             </SelectContent>
           </Select>
           <div className="h-4 w-px bg-hairline max-md:hidden" aria-hidden />
-          <Button variant="brand" className="max-md:hidden" onClick={() => edit()}>
+          <Button variant="brand" className="h-9 px-3.5 max-md:hidden" onClick={() => edit()}>
             <PlusIcon /> New invoice
           </Button>
         </div>
@@ -165,12 +165,13 @@ export function InvoicePage() {
               </span>
               <div className="flex flex-col gap-1.5">
                 <p className="t-14 text-fg">{filtered ? "No invoices match" : "No invoices yet"}</p>
-                <p className="t-14 text-fg-2">
+                <p className="t-14 max-w-[62ch] text-fg-2" style={{ maxWidth: "35em" }}>
                   {filtered ? "Try a different search or status." : "Create your first invoice to get paid."}
                 </p>
               </div>
               {filtered ? (
                 <Button
+                  className="h-9 px-3.5"
                   onClick={() => {
                     setQuery("");
                     setStatus("all");
@@ -179,7 +180,7 @@ export function InvoicePage() {
                   Clear filters
                 </Button>
               ) : (
-                <Button onClick={() => edit()}>
+                <Button className="h-9 px-3.5" onClick={() => edit()}>
                   <PlusIcon /> New invoice
                 </Button>
               )}
@@ -244,16 +245,9 @@ export function InvoicePage() {
                       className="h-14 cursor-pointer border-b border-subtle transition-colors duration-150 last:border-b-0 hover-fine:bg-hover/50"
                     >
                       <td className="px-4">
-                        <button
-                          type="button"
-                          className="t-14 rounded text-table outline-none focus-visible:ring-3 focus-visible:ring-brand/15"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            view(inv.id);
-                          }}
-                        >
+                        <span className="t-14 font-medium text-table">
                           {inv.number}
-                        </button>
+                        </span>
                       </td>
                       <td className="t-14 truncate px-2 text-table">{inv.client}</td>
                       <td className="t-14 px-2 text-table">{formatShort(inv.issueDate)}, {inv.issueDate.slice(0, 4)}</td>
@@ -303,7 +297,7 @@ function Stat({
       </span>
       <span
         className={cn(
-          "truncate text-[20px] leading-none font-medium tracking-[-0.4px] tabular-nums",
+          "truncate text-[22px] leading-none font-medium tracking-[-0.44px] tabular-nums",
           danger ? "text-danger" : "text-fg",
         )}
       >
@@ -361,7 +355,7 @@ function RowMenu({ invoice, today, triggerClassName }: { invoice: Invoice; today
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" className={triggerClassName} aria-label={`Actions for ${invoice.number}`}>
+        <Button variant="ghost" size="icon" className={cn("size-9", triggerClassName)} aria-label={`Actions for ${invoice.number}`}>
           <Icon name="more" />
         </Button>
       </DropdownMenuTrigger>

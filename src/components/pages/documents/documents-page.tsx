@@ -284,7 +284,7 @@ export function DocumentsPage() {
         title="Documents"
         description={`${documents.length} ${documents.length === 1 ? "file" : "files"} · ${formatSize(totalSize)}`}
         actions={
-          <Button variant="brand" onClick={() => fileInput.current?.click()}>
+          <Button variant="brand" className="h-9 px-3.5" onClick={() => fileInput.current?.click()}>
             <UploadIcon /> Upload
           </Button>
         }
@@ -293,9 +293,9 @@ export function DocumentsPage() {
       {/* Toolbar */}
       <div className="z-10 flex flex-wrap items-center gap-2 border-b border-hairline bg-surface px-4 py-3 max-md:sticky max-md:top-0 max-md:py-2.5">
         <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)} className="min-w-0 max-md:hidden">
-          <TabsList className="h-[30px]">
+          <TabsList className="h-9">
             {(["all", "starred", ...CATEGORIES] as Filter[]).map((f) => (
-              <TabsTrigger key={f} value={f} className="t-14 salt gap-1.5 px-2 text-[14px] data-active:text-fg">
+              <TabsTrigger key={f} value={f} className="t-14 salt h-8 gap-1.5 px-2.5 text-[14px] data-active:text-fg">
                 {f === "all" ? "All" : f === "starred" ? <StarIcon className="size-3.5" aria-label="Starred" /> : f}
                 {counts[f] ? <span className="t-12 text-placeholder tabular-nums">{counts[f]}</span> : null}
               </TabsTrigger>
@@ -311,11 +311,11 @@ export function DocumentsPage() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder={isMobile ? "Search" : "Search documents"}
               aria-label="Search documents"
-              className="h-[30px] w-52 pl-8 max-md:h-10 max-md:w-full max-md:text-[16px]"
+              className="h-9 w-52 pl-8 max-md:h-10 max-md:w-full max-md:text-[16px]"
             />
           </div>
           <Select value={sort} onValueChange={(v) => setSort(v as Sort)}>
-            <SelectTrigger className="h-[30px]! w-[124px] max-md:hidden" aria-label="Sort by">
+            <SelectTrigger className="h-9! w-[124px] max-md:hidden" aria-label="Sort by">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -352,7 +352,7 @@ export function DocumentsPage() {
                     aria-pressed={view === v}
                     onClick={() => setView(v)}
                     className={cn(
-                      "flex size-6 items-center justify-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 max-md:size-[34px]",
+                      "flex size-9 items-center justify-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 max-md:size-[34px]",
                       view === v ? "bg-selected text-fg" : "text-icon hover-fine:text-fg",
                     )}
                   >
@@ -436,14 +436,14 @@ function StarButton({ doc, className }: { doc: DocumentFile; className?: string 
   return (
     <Button
       variant="ghost"
-      size="icon-sm"
+      size="icon"
       aria-label={doc.starred ? `Unstar ${doc.name}` : `Star ${doc.name}`}
       aria-pressed={!!doc.starred}
       onClick={(e) => {
         e.stopPropagation();
         updateDocument(doc.id, { starred: !doc.starred });
       }}
-      className={cn(doc.starred && "text-warning hover-fine:text-warning", className)}
+      className={cn("size-9", doc.starred && "text-warning hover-fine:text-warning", className)}
     >
       <StarIcon className={cn(doc.starred && "fill-current")} />
     </Button>
@@ -469,10 +469,10 @@ function RowMenu({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           aria-label={`More actions for ${doc.name}`}
           onClick={(e) => e.stopPropagation()}
-          className={className}
+          className={cn("size-9", className)}
         >
           <MoreHorizontalIcon />
         </Button>
@@ -557,7 +557,7 @@ function DocumentTable({ docs, today, onRename }: ViewProps) {
                 <StarButton doc={d} />
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon-sm" aria-label={`Download ${d.name}`} onClick={() => downloadDoc(d)}>
+                    <Button variant="ghost" size="icon" className="size-9" aria-label={`Download ${d.name}`} onClick={() => downloadDoc(d)}>
                       <DownloadIcon />
                     </Button>
                   </TooltipTrigger>
@@ -632,8 +632,8 @@ function DocumentGrid({ docs, today, onRename }: ViewProps) {
               <CategoryBadge category={d.category} />
             </div>
             <div className="-mt-1 flex flex-col">
-              <StarButton doc={d} className="max-md:size-8" />
-              <RowMenu doc={d} onRename={onRename} className="max-md:size-8" />
+              <StarButton doc={d} className="size-9" />
+              <RowMenu doc={d} onRename={onRename} className="size-9" />
             </div>
           </div>
         </li>

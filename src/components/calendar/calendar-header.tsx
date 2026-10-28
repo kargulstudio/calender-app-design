@@ -74,18 +74,23 @@ export function CalendarHeader({ days }: { days: string[] }) {
           <p className="t-14 salt max-w-full truncate text-fg-2">{subtitle}</p>
         </div>
 
-        <Button size="sm" className="shrink-0 max-md:h-8" onClick={() => setDate(today)} aria-keyshortcuts="T">
+        <Button
+          size="lg"
+          className="h-9 px-3.5 min-h-[36px] min-w-[36px] shrink-0"
+          onClick={() => setDate(today)}
+          aria-keyshortcuts="T"
+        >
           Today
         </Button>
 
-        <div className="flex h-[30px] shrink-0 items-center overflow-hidden rounded-lg border border-control bg-surface max-md:h-8">
+        <div className="flex h-9 shrink-0 items-center overflow-hidden rounded-lg border border-control bg-surface">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 type="button"
                 onClick={() => step(-1)}
                 aria-label={`Previous ${unit}`}
-                className="press flex h-full w-[29px] items-center justify-center outline-none hover-fine:bg-hover focus-visible:bg-hover max-md:w-9"
+                className="press flex size-9 min-h-[36px] min-w-[36px] items-center justify-center outline-none hover-fine:bg-hover focus-visible:bg-hover"
               >
                 <Icon name="arrow-left" />
               </button>
@@ -99,7 +104,7 @@ export function CalendarHeader({ days }: { days: string[] }) {
                 type="button"
                 onClick={() => step(1)}
                 aria-label={`Next ${unit}`}
-                className="press flex h-full w-[29px] items-center justify-center outline-none hover-fine:bg-hover focus-visible:bg-hover max-md:w-9"
+                className="press flex size-9 min-h-[36px] min-w-[36px] items-center justify-center outline-none hover-fine:bg-hover focus-visible:bg-hover"
               >
                 <Icon name="arrow-right" className="-scale-x-100" />
               </button>
@@ -111,6 +116,7 @@ export function CalendarHeader({ days }: { days: string[] }) {
 
       <div
         role="tablist"
+        data-toolbar
         aria-label="Calendar view"
         className="relative flex h-[34px] w-full items-center gap-0.5 overflow-hidden rounded-lg bg-app p-px md:h-[30px] md:w-[163px]"
         style={{ "--w": `${active.width}px`, "--x": `${active.left}px`, "--i": activeIndex } as React.CSSProperties}

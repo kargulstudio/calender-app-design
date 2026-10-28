@@ -111,7 +111,7 @@ function ToggleIcon({
           aria-pressed={active}
           onClick={onClick}
           className={cn(
-            "flex size-8 items-center justify-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 md:size-6 [&_svg]:size-3.5",
+            "flex size-9 items-center justify-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 md:size-9 [&_svg]:size-3.5",
             active ? "bg-surface text-fg shadow-[0_1px_2px_rgba(0,0,0,0.06)]" : "text-icon hover-fine:text-fg",
           )}
         >
@@ -197,7 +197,7 @@ export function ColumnChart({
   const anchor = emphasized >= 0 ? emphasized : columns.length - 1;
 
   return (
-    <div className="flex gap-2 pt-4">
+    <div className="flex gap-2 pt-4" data-density="compact">
       {/* y axis */}
       <div className="relative w-8 shrink-0" style={{ height }} aria-hidden>
         {ticks.map((t) => (

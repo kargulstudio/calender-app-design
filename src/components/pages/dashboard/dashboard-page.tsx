@@ -70,11 +70,11 @@ export function DashboardPage() {
         description={`${WEEKDAYS[d.getDay()]}, ${MONTHS_SHORT[d.getMonth()]} ${d.getDate()} · Here’s what’s coming up`}
         actions={
           <>
-            <Button onClick={() => openOverlay({ kind: "event", date: today })}>
+            <Button className="h-9 px-3.5" onClick={() => openOverlay({ kind: "event", date: today })}>
               <PlusIcon className="text-icon" /> New event
             </Button>
             {/* Phones reach the calendar from the nav and the Upcoming card. */}
-            <Button asChild className="max-md:hidden">
+            <Button asChild className="h-9 px-3.5 max-md:hidden">
               <Link href="/time-off">
                 <Icon name="nav-calendar" /> Open calendar
               </Link>
@@ -204,7 +204,7 @@ function UpcomingCard() {
         title="Upcoming"
         description="Your next events and time off"
         actions={
-          <Button variant="ghost" size="sm" asChild className="max-md:h-9">
+          <Button variant="ghost" size="sm" asChild className="h-9 px-3 max-md:h-9">
             <Link href="/time-off">
               View calendar <ArrowRightIcon />
             </Link>
@@ -217,7 +217,7 @@ function UpcomingCard() {
           title="Your calendar is clear"
           hint="Nothing scheduled from today onward."
           action={
-            <Button onClick={() => openOverlay({ kind: "event", date: today })}>
+            <Button className="h-9 px-3.5" onClick={() => openOverlay({ kind: "event", date: today })}>
               <PlusIcon className="text-icon" /> New event
             </Button>
           }
@@ -237,7 +237,7 @@ function UpcomingCard() {
                     className="flex w-10 shrink-0 flex-col items-center gap-1 rounded-md py-1.5"
                     style={eventStyle(e.color)}
                   >
-                    <span className="text-[10px] leading-none tracking-wide uppercase">{MONTHS_SHORT[dd.getMonth()]}</span>
+                    <span className="t-12 leading-none font-medium tracking-wide uppercase">{MONTHS_SHORT[dd.getMonth()]}</span>
                     <span className="t-14">{dd.getDate()}</span>
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -287,7 +287,7 @@ function WeekHoursCard() {
         title="Hours this week"
         description={total ? `${formatDuration(total)} tracked` : "No time tracked yet this week"}
         actions={
-          <Button variant="ghost" size="sm" asChild className="max-md:h-9">
+          <Button variant="ghost" size="sm" asChild className="h-9 px-3 max-md:h-9">
             <Link href="/time-tracking">
               <TimerIcon /> Time tracking
             </Link>
@@ -385,7 +385,7 @@ function BalanceCard() {
         title="Leave balance"
         description={`${stats.contract} contract + ${stats.carryover} carryover days`}
         actions={
-          <Button variant="ghost" size="sm" className="max-md:h-9" onClick={() => openOverlay({ kind: "policy" })}>
+          <Button variant="ghost" size="sm" className="h-9 px-3 max-md:h-9" onClick={() => openOverlay({ kind: "policy" })}>
             Policy
           </Button>
         }
@@ -414,7 +414,7 @@ function BalanceCard() {
             </li>
           ))}
         </ul>
-        <Button variant="brand" className="w-full max-md:h-10" onClick={() => openOverlay({ kind: "request" })}>
+        <Button variant="brand" className="w-full h-9 px-3.5 max-md:h-10" onClick={() => openOverlay({ kind: "request" })}>
           <Icon name="request-time-off" className="text-white" /> Request time-off
         </Button>
       </div>
@@ -476,7 +476,7 @@ function NotificationsCard() {
         description={unread ? `${unread} unread` : "You’re all caught up"}
         actions={
           unread ? (
-            <Button variant="ghost" size="sm" onClick={markAll} className="t-12 max-md:h-9">
+            <Button variant="ghost" size="sm" onClick={markAll} className="t-12 h-9 px-3 max-md:h-9">
               Mark all read
             </Button>
           ) : null
