@@ -188,7 +188,7 @@ export function PersonalDetailsPage() {
               </p>
             </div>
           </div>
-          <ul className="grid gap-x-4 gap-y-3 border-t border-subtle px-4 py-4 sm:grid-cols-2 lg:grid-cols-1">
+          <ul className="grid gap-x-4 gap-y-3 border-t border-subtle px-4 py-4 sm:grid-cols-2 lg:grid-cols-1" data-catalog>
             <SummaryRow icon={<MailIcon />}>{draft.email || "—"}</SummaryRow>
             <SummaryRow icon={<PhoneIcon />}>{draft.phone || "—"}</SummaryRow>
             <SummaryRow icon={<MapPinIcon />}>{draft.location || "—"}</SummaryRow>
@@ -196,7 +196,7 @@ export function PersonalDetailsPage() {
               {draft.startDate ? `Joined ${MONTHS[fromKey(draft.startDate).getMonth()].slice(0, 3)} ${draft.startDate.slice(0, 4)}` : "—"}
               {t ? <span className="text-placeholder"> · {t}</span> : null}
             </SummaryRow>
-            <SummaryRow icon={<CakeIcon />}>
+            <SummaryRow icon={<CakeIcon />} className="sm:col-span-2 lg:col-span-1">
               {birthday ? `${MONTHS[birthday.getMonth()]} ${birthday.getDate()}` : "—"}
             </SummaryRow>
           </ul>
@@ -220,7 +220,7 @@ export function PersonalDetailsPage() {
               <button
                 type="button"
                 onClick={() => set("initials", initialsFrom(draft.name))}
-                className="t-12 -mt-2 w-fit text-brand outline-none hover-fine:text-brand-strong focus-visible:underline max-md:-my-1 max-md:py-1.5"
+                className="t-12 -mt-2 inline-flex min-h-[36px] w-fit items-center text-brand outline-none hover-fine:text-brand-strong focus-visible:underline"
               >
                 Use “{initialsFrom(draft.name)}” from your name
               </button>
@@ -249,7 +249,7 @@ export function PersonalDetailsPage() {
               <Field label="Location" htmlFor="pd-location">
                 {input("location", { placeholder: "City, Country" })}
               </Field>
-              <Field label="Start date" htmlFor="pd-startDate" hint={t ? `${t} at the company` : undefined}>
+              <Field label="Start date" htmlFor="pd-startDate" hint={t ? `${t} at the company` : undefined} className="sm:col-span-2">
                 {input("startDate", { type: "date", max: today })}
               </Field>
             </div>
@@ -318,9 +318,9 @@ function Section({ title, description, children }: { title: string; description:
   );
 }
 
-function SummaryRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+function SummaryRow({ icon, children, className }: { icon: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
-    <li className="flex items-center gap-2.5 [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:text-icon">
+    <li className={cn("flex items-center gap-2.5 [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:text-icon", className)}>
       {icon}
       <span className="t-14 min-w-0 flex-1 truncate text-fg-2">{children}</span>
     </li>

@@ -83,7 +83,7 @@ export function SettingsPage() {
               // Keep a tapped, half-hidden tab fully in view.
               onClick={(e) => e.currentTarget.scrollIntoView({ block: "nearest", inline: "nearest" })}
               className={cn(
-                "t-14 salt h-8 w-full flex-none justify-start gap-2 rounded-lg border-0 px-2 text-[14px] text-fg-2 after:hidden",
+                "t-14 salt h-9 w-full flex-none justify-start gap-2 rounded-lg border-0 px-2 text-[14px] text-fg-2 after:hidden",
                 "max-md:h-10 max-md:w-auto! max-md:px-3",
                 "hover-fine:bg-hover hover-fine:text-fg data-active:bg-selected data-active:text-fg data-active:shadow-none",
                 "dark:data-active:border-transparent dark:data-active:bg-selected",
@@ -124,7 +124,7 @@ function Panel({ title, description, children }: { title: string; description: s
     <div className="grid gap-4">
       <div className="grid gap-2 px-1">
         <h3 className="t-16 text-fg">{title}</h3>
-        <p className="t-14 text-fg-2">{description}</p>
+        <p className="t-14 max-w-[62ch] text-fg-2" style={{ maxWidth: "35em" }}>{description}</p>
       </div>
       <Card className="divide-y divide-subtle">{children}</Card>
     </div>
@@ -150,6 +150,7 @@ function Row({
 }) {
   return (
     <div
+      data-density="compact"
       className={cn(
         "flex min-h-[68px] items-center gap-4 px-4 py-3 sm:gap-6",
         stack && "max-sm:flex-col max-sm:items-stretch max-sm:gap-3 max-sm:py-3.5",
@@ -159,7 +160,7 @@ function Row({
         <label htmlFor={htmlFor} className="t-14 text-fg">
           {title}
         </label>
-        {description ? <p className="t-12 leading-[1.4] text-fg-2">{description}</p> : null}
+        {description ? <p className="t-12 max-w-[62ch] leading-[1.4] text-fg-2" style={{ maxWidth: "35em" }}>{description}</p> : null}
       </div>
       <div
         className={cn(
@@ -184,7 +185,7 @@ function GeneralTab() {
           value={String(settings.weekStartsOn)}
           onValueChange={(v) => set("weekStartsOn", Number(v) as 0 | 1)}
         >
-          <SelectTrigger id="st-week" className={cn("w-40", TOUCH_CONTROL)}>
+          <SelectTrigger id="st-week" className={cn("w-40", TOUCH_CONTROL)} style={{ minHeight: "36px", height: "36px" }}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -195,7 +196,7 @@ function GeneralTab() {
       </Row>
       <Row title="Time format" description="Used for events, requests and time entries" htmlFor="st-time" stack>
         <Select value={settings.timeFormat} onValueChange={(v) => set("timeFormat", v as Settings["timeFormat"])}>
-          <SelectTrigger id="st-time" className={cn("w-40", TOUCH_CONTROL)}>
+          <SelectTrigger id="st-time" className={cn("w-40", TOUCH_CONTROL)} style={{ minHeight: "36px", height: "36px" }}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -206,7 +207,7 @@ function GeneralTab() {
       </Row>
       <Row title="Calendar day starts at" description="Day and week views scroll to this hour" htmlFor="st-start" stack>
         <Select value={String(settings.dayStartHour)} onValueChange={(v) => set("dayStartHour", Number(v))}>
-          <SelectTrigger id="st-start" className={cn("w-40", TOUCH_CONTROL)}>
+          <SelectTrigger id="st-start" className={cn("w-40", TOUCH_CONTROL)} style={{ minHeight: "36px", height: "36px" }}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="max-h-72">
@@ -219,7 +220,13 @@ function GeneralTab() {
         </Select>
       </Row>
       <Row title="Show weekends" description="Hide Saturday and Sunday to focus on the work week" htmlFor="st-weekends">
-        <Switch id="st-weekends" checked={settings.showWeekends} onCheckedChange={(v) => set("showWeekends", v)} />
+        <Switch
+          id="st-weekends"
+          className="after:hidden"
+          style={{ minHeight: "28px", minWidth: "44px", height: "28px", width: "44px" }}
+          checked={settings.showWeekends}
+          onCheckedChange={(v) => set("showWeekends", v)}
+        />
       </Row>
     </Panel>
   );
@@ -249,13 +256,13 @@ function Stepper({
 
   return (
     <div className="flex items-center gap-1 max-sm:w-full">
-      <Button size="icon" className="max-md:size-10" aria-label={`Decrease ${label}`} disabled={value <= min} onClick={() => commit(value - 1)}>
+      <Button size="icon" className="size-9 max-md:size-10" aria-label={`Decrease ${label}`} disabled={value <= min} onClick={() => commit(value - 1)}>
         <MinusIcon className="text-icon" />
       </Button>
       <Input
         id={id}
         inputMode="numeric"
-        className="h-[30px] w-14 text-center tabular-nums max-md:h-10 max-md:text-[16px] max-sm:flex-1"
+        className="h-9 w-14 text-center tabular-nums max-md:h-10 max-md:text-[16px] max-sm:flex-1"
         value={text ?? String(value)}
         aria-invalid={invalid || undefined}
         onChange={(e) => {
@@ -277,7 +284,7 @@ function Stepper({
           }
         }}
       />
-      <Button size="icon" className="max-md:size-10" aria-label={`Increase ${label}`} disabled={value >= max} onClick={() => commit(value + 1)}>
+      <Button size="icon" className="size-9 max-md:size-10" aria-label={`Increase ${label}`} disabled={value >= max} onClick={() => commit(value + 1)}>
         <PlusIcon className="text-icon" />
       </Button>
     </div>
@@ -347,15 +354,29 @@ function NotificationsTab() {
       <Row title="Email" description={`Approvals, declines and reminders to ${email}`} htmlFor="st-email">
         <Switch
           id="st-email"
+          className="after:hidden"
+          style={{ minHeight: "28px", minWidth: "44px", height: "28px", width: "44px" }}
           checked={settings.emailNotifications}
           onCheckedChange={(v) => set("emailNotifications", v)}
         />
       </Row>
       <Row title="Push" description="Instant alerts in this browser" htmlFor="st-push">
-        <Switch id="st-push" checked={settings.pushNotifications} onCheckedChange={(v) => set("pushNotifications", v)} />
+        <Switch
+          id="st-push"
+          className="after:hidden"
+          style={{ minHeight: "28px", minWidth: "44px", height: "28px", width: "44px" }}
+          checked={settings.pushNotifications}
+          onCheckedChange={(v) => set("pushNotifications", v)}
+        />
       </Row>
       <Row title="Weekly digest" description="A Monday summary of your week ahead and leave balance" htmlFor="st-digest">
-        <Switch id="st-digest" checked={settings.weeklyDigest} onCheckedChange={(v) => set("weeklyDigest", v)} />
+        <Switch
+          id="st-digest"
+          className="after:hidden"
+          style={{ minHeight: "28px", minWidth: "44px", height: "28px", width: "44px" }}
+          checked={settings.weeklyDigest}
+          onCheckedChange={(v) => set("weeklyDigest", v)}
+        />
       </Row>
     </Panel>
   );
@@ -419,7 +440,7 @@ function AppearanceTab() {
     <div className="grid gap-4">
       <div className="grid gap-2 px-1">
         <h3 className="t-16 text-fg">Appearance</h3>
-        <p className="t-14 text-fg-2">Pick a theme for this browser. You can also toggle it from the sidebar.</p>
+        <p className="t-14 max-w-[62ch] text-fg-2" style={{ maxWidth: "35em" }}>Pick a theme for this browser. You can also toggle it from the sidebar.</p>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:gap-4" role="radiogroup" aria-label="Theme">
         {(["light", "dark"] as const).map((t) => {
@@ -484,7 +505,7 @@ function DataTab() {
   return (
     <Panel title="Data" description="Everything lives in this browser’s local storage.">
       <Row title="Export data" description={counts} stack>
-        <Button onClick={exportJson} className={TOUCH_CONTROL}>
+        <Button onClick={exportJson} className={cn("h-9 px-3.5", TOUCH_CONTROL)}>
           <DownloadIcon className="text-icon" /> Export JSON
         </Button>
       </Row>
@@ -495,7 +516,7 @@ function DataTab() {
       >
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className={TOUCH_CONTROL}>
+            <Button variant="destructive" className={cn("h-9 px-3.5", TOUCH_CONTROL)}>
               <RotateCcwIcon /> Reset
             </Button>
           </AlertDialogTrigger>

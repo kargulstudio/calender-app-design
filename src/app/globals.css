@@ -17,7 +17,7 @@
 /* Design tokens — names mirror the Figma variables                     */
 /* ------------------------------------------------------------------ */
 :root {
-  --bg-app: #f8f8f8;
+  --bg-app: oklch(0.979 0.006 245);
   --bg-surface: #ffffff;
   --bg-selected: #eaeae6;
   --bg-hover: #f1f1ee;
@@ -33,12 +33,12 @@
   --text-section: #b8b8b8;
   --text-heading: #09090b;
   --text-table: #040e11;
-  --text-dayname: #c2c2c2;
+  --text-dayname: #666666;
   --text-on-accent: #ffffff;
   --icon: #a1a1a1;
 
   --brand: #8965de;
-  --brand-strong: #7a55d4;
+  --brand-strong: #7958ce;
   --brand-tint: rgba(137, 101, 222, 0.1);
 
   --event-green-bg: #bde7db;
@@ -55,7 +55,7 @@
   --event-blue-fg: #0e5289;
 
   --category-green-tint: rgba(0, 164, 117, 0.12);
-  --category-orange-tint: rgba(248, 140, 47, 0.12);
+  --category-orange-tint: rgba(223, 122, 36, 0.12);
   --category-blue-tint: rgba(23, 139, 232, 0.12);
   --category-cyan-tint: rgba(100, 213, 233, 0.16);
   --category-pink-tint: rgba(248, 100, 164, 0.12);
@@ -64,12 +64,12 @@
   --status-success: #00a475;
   --status-success-tint: rgba(0, 164, 117, 0.08);
   --status-success-border: rgba(0, 164, 117, 0.12);
-  --status-danger: #ef4747;
+  --status-danger: #e35753;
   --status-danger-tint: rgba(239, 71, 71, 0.08);
   --status-danger-border: rgba(239, 71, 71, 0.12);
-  --status-warning: #e07a1f;
-  --status-warning-tint: rgba(248, 140, 47, 0.1);
-  --status-warning-border: rgba(248, 140, 47, 0.16);
+  --status-warning: #df7a24;
+  --status-warning-tint: rgba(223, 122, 36, 0.1);
+  --status-warning-border: rgba(223, 122, 36, 0.16);
   --status-neutral: #757575;
   --status-neutral-tint: rgba(117, 117, 117, 0.08);
   --status-neutral-border: rgba(117, 117, 117, 0.14);
@@ -122,7 +122,7 @@
   --text-section: #5c5c5c;
   --text-heading: #f5f5f5;
   --text-table: #e4e4e4;
-  --text-dayname: #6b6b6b;
+  --text-dayname: #a3a3a3;
   --icon: #7d7d7d;
 
   --brand-tint: rgba(137, 101, 222, 0.18);
@@ -310,7 +310,7 @@
 
 /* iOS zooms into any field under 16px on focus — keep touch inputs at 16px.
    Unlayered on purpose so it wins over the t-14 utility. */
-@media (pointer: coarse) {
+@media (pointer: coarse), (max-width: 639px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   textarea,
   select {

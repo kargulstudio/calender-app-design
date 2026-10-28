@@ -45,6 +45,9 @@ export function Calendar() {
   return (
     <section
       aria-label="Calendar"
+      data-viz
+      data-density="compact"
+      role="grid"
       className="flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-surface [--axis:44px] md:[--axis:70px]"
     >
       <CalendarHeader days={days} />

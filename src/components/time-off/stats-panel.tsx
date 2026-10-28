@@ -102,7 +102,7 @@ export function StatsPanel({ onShowPending }: { onShowPending: () => void }) {
             type="button"
             onClick={stat.onSelect}
             aria-label={`${stat.value}. ${stat.label}`}
-            className="group relative flex w-full shrink-0 items-center gap-3 py-4 pr-2 text-left outline-none before:absolute before:-inset-x-2 before:inset-y-1.5 before:rounded-lg before:transition-colors before:duration-150 hover-fine:before:bg-hover focus-visible:before:ring-2 focus-visible:before:ring-brand/40"
+            className="group relative flex w-full min-w-0 shrink-0 items-center gap-3 overflow-hidden rounded-lg px-2 py-3 text-left outline-none before:absolute before:inset-0 before:rounded-lg before:transition-colors before:duration-150 hover-fine:before:bg-hover focus-visible:before:ring-2 focus-visible:before:ring-brand/40"
           >
             <span
               className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-[10px]"
@@ -110,9 +110,9 @@ export function StatsPanel({ onShowPending }: { onShowPending: () => void }) {
             >
               <Image src={`/icons/${stat.icon}.svg`} alt="" width={20} height={20} unoptimized />
             </span>
-            <span className="relative flex min-w-0 flex-1 flex-col gap-2 overflow-hidden">
-              <span className="t-16 w-full text-fg">{stat.value}</span>
-              <span className={stat.id === "holidays" ? "t-14 salt w-full text-brand" : "t-14 salt w-full text-fg-2"}>
+            <span className="relative flex min-w-0 flex-1 flex-col gap-1 overflow-hidden">
+              <span className="t-16 w-full truncate text-fg">{stat.value}</span>
+              <span className={stat.id === "holidays" ? "t-14 salt w-full truncate text-brand" : "t-14 salt w-full truncate text-fg-2"}>
                 {stat.caption}
               </span>
             </span>

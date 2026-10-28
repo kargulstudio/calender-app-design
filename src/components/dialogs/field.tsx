@@ -24,11 +24,11 @@ export function Field({
       </Label>
       {children}
       {error ? (
-        <p className="t-12 text-danger" role="alert">
+        <p className="t-12 w-fit max-w-[35em] text-danger" role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p className="t-12 leading-[1.35] text-fg-2">{hint}</p>
+        <p className="t-12 w-fit max-w-[35em] leading-[1.35] text-fg-2">{hint}</p>
       ) : null}
     </div>
   );

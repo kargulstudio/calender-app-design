@@ -59,22 +59,22 @@ export function InvoiceView() {
               {/* Phones move these into the bottom action bar */}
               <div className="flex items-center gap-2 max-sm:hidden">
                 {invoice.status !== "paid" && (
-                  <Button size="sm" className="px-2" onClick={() => edit(invoice.id)}>
+                  <Button className="h-9 px-3" onClick={() => edit(invoice.id)}>
                     <PencilIcon className="text-icon" /> Edit
                   </Button>
                 )}
-                <Button size="sm" className="px-2" onClick={() => printInvoice(invoice, profile)}>
+                <Button className="h-9 px-3" onClick={() => printInvoice(invoice, profile)}>
                   <PrinterIcon className="text-icon" /> Print
                 </Button>
-                <Button size="sm" className="px-2" onClick={download}>
+                <Button className="h-9 px-3" onClick={download}>
                   <DownloadIcon className="text-icon" /> Download
                 </Button>
                 {invoice.status === "draft" ? (
-                  <Button size="sm" variant="brand" className="px-2" onClick={send}>
+                  <Button variant="brand" className="h-9 px-3" onClick={send}>
                     <SendIcon /> Send
                   </Button>
                 ) : invoice.status !== "paid" ? (
-                  <Button size="sm" variant="brand" className="px-2" onClick={markPaid}>
+                  <Button variant="brand" className="h-9 px-3" onClick={markPaid}>
                     <CheckIcon /> Mark as paid
                   </Button>
                 ) : null}
@@ -150,7 +150,7 @@ export function InvoiceView() {
                   <dt className="t-14 text-fg-2">Subtotal</dt>
                   <dd className="t-14 text-right text-table tabular-nums">{formatMoney(total, invoice.currency)}</dd>
                   <dt className="t-14 border-t border-hairline pt-3 text-fg">{status === "paid" ? "Total paid" : "Total due"}</dt>
-                  <dd className="border-t border-hairline pt-3 text-right text-[20px] leading-none font-medium tracking-[-0.4px] text-fg tabular-nums">
+                  <dd className="border-t border-hairline pt-3 text-right text-[22px] leading-none font-medium tracking-[-0.44px] text-fg tabular-nums">
                     {formatMoney(total, invoice.currency)}
                   </dd>
                 </dl>

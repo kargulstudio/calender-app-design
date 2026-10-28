@@ -51,12 +51,17 @@ export function PageHeader({
     >
       <div className="flex min-w-0 flex-1 basis-40 flex-col gap-2 md:basis-0">
         <h2 className="t-16 text-pretty text-fg md:truncate">{title}</h2>
-        {description ? <p className="t-14 text-pretty text-fg-2 md:truncate">{description}</p> : null}
+        {description ? (
+          <p className="t-14 max-w-[62ch] text-pretty text-fg-2 md:truncate" style={{ maxWidth: "35em" }}>
+            {description}
+          </p>
+        ) : null}
       </div>
       {actions ? (
         <div
           className={cn(
             "flex shrink-0 items-center gap-2",
+            "[&_[data-slot=button]]:h-9 [&_[data-slot=button][data-size=default]]:px-3.5 [&_[data-slot=button][data-size=icon]]:size-9",
             "max-md:[&_[data-slot=button]]:h-10 max-md:[&_[data-slot=button][data-size=default]]:px-3.5 max-md:[&_[data-slot=button][data-size=icon]]:w-10",
           )}
         >
@@ -92,7 +97,11 @@ export function CardHeader({
     <header className={cn("flex min-h-[52px] items-center gap-3 border-b border-subtle px-4 py-3", className)}>
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <h3 className="t-14 text-pretty text-fg md:truncate">{title}</h3>
-        {description ? <p className="t-12 text-pretty text-fg-2 md:truncate">{description}</p> : null}
+        {description ? (
+          <p className="t-12 max-w-[62ch] text-pretty text-fg-2 md:truncate" style={{ maxWidth: "35em" }}>
+            {description}
+          </p>
+        ) : null}
       </div>
       {actions ? <div className="flex shrink-0 items-center gap-1">{actions}</div> : null}
     </header>

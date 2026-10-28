@@ -62,7 +62,7 @@ export function BenefitsPage() {
       <header className="sticky top-0 z-10 flex min-h-[68px] shrink-0 items-center gap-3 border-b border-hairline bg-surface px-4 py-3 md:h-[68px] md:py-0">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <h2 className="t-16 text-fg">Your benefits</h2>
-          <p className="t-14 leading-[1.3] text-fg-2 md:truncate md:leading-none">
+          <p className="t-14 max-w-[62ch] leading-[1.3] text-fg-2 md:truncate md:leading-none" style={{ maxWidth: "35em" }}>
             {summary.enrolled} of {benefits.length} enrolled · budgets reset on renewal
           </p>
         </div>
@@ -79,7 +79,7 @@ export function BenefitsPage() {
               summary.budget > 0 ? (
                 <Progress
                   value={(summary.used / summary.budget) * 100}
-                  className="mt-1 h-1 bg-app"
+                  className="mt-1 h-1 bg-app [&_[data-slot=progress-indicator]]:transition-transform"
                   aria-label="Budget used"
                 />
               ) : null
@@ -104,7 +104,7 @@ export function BenefitsPage() {
                 aria-pressed={active}
                 onClick={() => setFilter(c)}
                 className={cn(
-                  "press t-14 flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-brand/15 md:h-7 md:px-2.5",
+                  "press t-14 flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-brand/15 md:h-9 md:px-3",
                   active
                     ? "border-control bg-surface text-fg shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
                     : "border-transparent text-fg-2 hover-fine:bg-hover hover-fine:text-fg max-md:border-hairline",
@@ -123,7 +123,7 @@ export function BenefitsPage() {
             <p className="t-14 text-fg-2">No {filter.toLowerCase()} benefits yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-4">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-4" role="grid" data-catalog>
             {visible.map((b) => (
               <BenefitCard
                 key={b.id}
@@ -190,7 +190,7 @@ function SummaryStat({
     <div className="flex min-w-0 flex-col gap-2.5 border-hairline px-4 py-3.5 max-md:odd:border-r max-md:nth-[-n+2]:border-b md:border-r md:last:border-r-0">
       <dt className="t-12 text-fg-2">{label}</dt>
       <dd className="flex items-baseline gap-1.5">
-        <span className="text-[20px] leading-none font-medium tracking-[-0.4px] text-fg tabular-nums">{value}</span>
+        <span className="text-[22px] leading-none font-medium tracking-[-0.44px] text-fg tabular-nums">{value}</span>
         {suffix && <span className="t-14 text-fg-2">{suffix}</span>}
       </dd>
       {extra}
@@ -214,7 +214,7 @@ function BenefitCard({
   const nearlyUsed = pct >= 90;
 
   return (
-    <article className="flex flex-col rounded-xl border border-hairline bg-surface">
+    <article className="flex flex-col rounded-xl border border-hairline bg-surface" role="row">
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-start gap-3">
           <CategoryTile category={b.category} />
@@ -237,7 +237,7 @@ function BenefitCard({
             </span>
           )}
         </div>
-        <p className="t-14 leading-[1.4] text-fg-2">{b.description}</p>
+        <p className="t-14 max-w-[62ch] leading-[1.4] text-fg-2" style={{ maxWidth: "35em" }}>{b.description}</p>
 
         <div className="mt-auto flex flex-col gap-2">
           {b.budget > 0 ? (
@@ -254,14 +254,14 @@ function BenefitCard({
                 value={pct}
                 aria-label={`${b.name} budget used`}
                 className={cn(
-                  "h-1.5 bg-app",
+                  "h-1.5 bg-app [&_[data-slot=progress-indicator]]:transition-transform",
                   !b.enrolled && "opacity-50",
                   nearlyUsed && "[&_[data-slot=progress-indicator]]:bg-warning",
                 )}
               />
             </>
           ) : (
-            <p className="t-14 leading-[1.3] text-fg-2">No spending budget — covered in full by the company.</p>
+            <p className="t-14 max-w-[62ch] leading-[1.3] text-fg-2" style={{ maxWidth: "35em" }}>No spending budget — covered in full by the company.</p>
           )}
         </div>
       </div>
@@ -276,8 +276,7 @@ function BenefitCard({
           <>
             {b.budget > 0 && (
               <Button
-                size="sm"
-                className="px-2 max-sm:h-10 max-sm:flex-1"
+                className="h-9 px-3 max-sm:h-10 max-sm:flex-1"
                 disabled={remaining <= 0}
                 onClick={onClaim}
                 aria-label={`Submit a claim for ${b.name}`}
@@ -285,12 +284,12 @@ function BenefitCard({
                 <ReceiptIcon className="text-icon" /> Claim
               </Button>
             )}
-            <Button size="sm" variant="ghost" className="px-2 max-sm:h-10 max-sm:flex-1" onClick={onUnenroll}>
+            <Button variant="ghost" className="h-9 px-3 max-sm:h-10 max-sm:flex-1" onClick={onUnenroll}>
               Unenroll
             </Button>
           </>
         ) : (
-          <Button size="sm" variant="brand" className="px-2 max-sm:h-10 max-sm:flex-1" onClick={onEnroll}>
+          <Button variant="brand" className="h-9 px-3 max-sm:h-10 max-sm:flex-1" onClick={onEnroll}>
             <PlusIcon /> Enroll
           </Button>
         )}

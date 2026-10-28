@@ -240,7 +240,7 @@ function HoursCard() {
               aria-pressed={mode === m}
               onClick={() => setMode(m)}
               className={cn(
-                "t-12 h-8 rounded-md px-3 outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 md:h-6 md:px-2",
+                "t-12 h-9 rounded-md px-3.5 outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand/40 md:h-9 md:px-3",
                 mode === m ? "bg-surface text-fg shadow-[0_1px_2px_rgba(0,0,0,0.06)]" : "text-fg-2 hover-fine:text-fg",
               )}
             >
@@ -389,7 +389,7 @@ function InvoicesCard() {
       title="Invoice revenue by status"
       description={`${money(total, currency)} invoiced across ${plural(invoices.length, "invoice", "invoices")}`}
       actions={
-        <Button variant="ghost" size="sm" asChild className="max-md:h-9 md:mr-1">
+        <Button variant="ghost" size="sm" asChild className="h-9 px-3 max-md:h-9 md:mr-1">
           <Link href="/invoice">
             Invoices <ArrowRightIcon />
           </Link>

@@ -57,14 +57,14 @@ export function TimerCard({ projects, todayMinutes }: { projects: string[]; toda
           aria-label="Project"
           placeholder="Project"
           list="tt-projects"
-          className="h-10 text-[16px] md:h-[30px] md:w-52 md:text-[14px]"
+          className="h-10 text-[16px] md:h-9 md:w-52 md:text-[14px]"
           value={timer.project}
           onChange={(e) => updateTimer({ project: e.target.value })}
         />
         <Input
           aria-label="Task"
           placeholder="What are you working on?"
-          className="h-10 min-w-0 text-[16px] md:h-[30px] md:flex-1 md:text-[14px]"
+          className="h-10 min-w-0 text-[16px] md:h-9 md:flex-1 md:text-[14px]"
           value={timer.task}
           onChange={(e) => updateTimer({ task: e.target.value })}
         />
@@ -83,7 +83,7 @@ export function TimerCard({ projects, todayMinutes }: { projects: string[]; toda
 /** Sticky bottom bar on phones: elapsed time and Start/Stop within thumb reach. */
 export function TimerBar({ todayMinutes }: { todayMinutes: number }) {
   return (
-    <div className="sticky bottom-0 z-10 border-t border-hairline bg-surface px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden">
+    <div className="relative shrink-0 border-t border-hairline bg-surface px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden">
       <TimerControls todayMinutes={todayMinutes} variant="bar" />
     </div>
   );
@@ -128,11 +128,11 @@ function TimerControls({
         </span>
       </div>
       {timer.running ? (
-        <Button type="submit" form={FORM_ID} variant="destructive" className={bar ? "h-10 w-[104px]" : "w-[84px]"}>
+        <Button type="submit" form={FORM_ID} variant="destructive" className={bar ? "h-10 w-[104px]" : "h-9 w-[84px]"}>
           <SquareIcon className="fill-current" /> Stop
         </Button>
       ) : (
-        <Button type="submit" form={FORM_ID} variant="brand" className={bar ? "h-10 w-[104px]" : "w-[84px]"}>
+        <Button type="submit" form={FORM_ID} variant="brand" className={bar ? "h-10 w-[104px]" : "h-9 w-[84px]"}>
           <PlayIcon className="fill-current" /> Start
         </Button>
       )}
