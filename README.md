@@ -43,6 +43,33 @@ Open http://localhost:3000. To return to the exact design state, use
 - **Other pages** — Dashboard, Analytics, Personal details, Documents, Time
   tracking, Benefits, Invoice, Withdrawal methods, Settings.
 
+## Hosting on Azure Static Web Apps (free)
+
+The app has no server code, so it can also be exported as plain files and served
+from the **Free** plan of Azure Static Web Apps. `STATIC_EXPORT=1` switches the
+build to `output: "export"` (turning off Cache Components and Partial
+Prefetching, which need a server) and writes the site to `out/`.
+`public/staticwebapp.config.json` redirects `/` to `/time-off` and serves the
+404 page.
+
+One-time setup with the Azure CLI:
+
+```bash
+az group create -n kargul-calendar-rg -l eastasia
+az staticwebapp create -n kargul-calendar -g kargul-calendar-rg -l eastasia --sku Free
+```
+
+Build and deploy (Git Bash):
+
+```bash
+STATIC_EXPORT=1 npm run build
+SWA_CLI_DEPLOYMENT_TOKEN=$(az staticwebapp secrets list -n kargul-calendar -g kargul-calendar-rg --query properties.apiKey -o tsv) \
+  npx @azure/static-web-apps-cli@2 deploy ./out --env production
+```
+
+`NEXT_PUBLIC_*` variables are inlined at build time, so rebuild and redeploy
+after changing them.
+
 ## Project layout
 
 ```
