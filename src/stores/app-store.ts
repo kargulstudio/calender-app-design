@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { formatShort, rangeKeys } from "@/lib/dates";
+import { isGoogleEventId } from "@/lib/google-calendar";
 import { durationLabel, LEAVE_COLORS, WORKDAY_MINUTES, workingDays } from "@/lib/leave";
 import { createSeed, STATE_VERSION } from "@/lib/seed";
 import type {
@@ -21,6 +22,7 @@ import type {
   TimeEntry,
   WithdrawalMethod,
 } from "@/lib/types";
+import { useGoogleStore } from "./google-store";
 
 export function uid(prefix = "id"): string {
   return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
@@ -84,7 +86,12 @@ type Actions = {
   updateBenefit: (id: string, patch: Partial<Benefit>) => void;
   // misc
   resetDemoData: () => void;
+  /** Clears the sample records so the app holds only your own data. */
+  startFresh: (email?: string) => void;
 };
+
+/** True while the profile is still the seed's sample person. */
+export const isSampleProfile = (s: AppState) => s.profile.email === createSeed().profile.email;
 
 export type AppStore = AppState & Actions;
 
@@ -244,7 +251,11 @@ export const useAppStore = create<AppStore>()(
       },
 
       // ------------------------------------------------------------ events
+      // Google events (and new events while Google is connected) go to Google
+      // Calendar instead; they aren't part of this store or its undo history.
       saveEvent: (event) => {
+        const google = useGoogleStore.getState();
+        if (isGoogleEventId(event.id) || (!event.id && google.status === "connected")) return google.save(event);
         const saved: CalEvent = { ...event, id: event.id ?? uid("ev") };
         set((s) => ({
           events: s.events.some((e) => e.id === saved.id)
@@ -253,8 +264,12 @@ export const useAppStore = create<AppStore>()(
         }));
         return saved;
       },
-      moveEvent: (id, patch) => set((s) => ({ events: s.events.map((e) => (e.id === id ? { ...e, ...patch } : e)) })),
+      moveEvent: (id, patch) => {
+        if (isGoogleEventId(id)) return useGoogleStore.getState().move(id, patch);
+        set((s) => ({ events: s.events.map((e) => (e.id === id ? { ...e, ...patch } : e)) }));
+      },
       deleteEvent: (id) => {
+        if (isGoogleEventId(id)) return useGoogleStore.getState().remove(id);
         const removed = get().events.find((e) => e.id === id);
         if (!removed) return;
         set((s) => ({ events: s.events.filter((e) => e.id !== id) }));
@@ -264,6 +279,7 @@ export const useAppStore = create<AppStore>()(
         });
       },
       duplicateEvent: (id) => {
+        if (isGoogleEventId(id)) return useGoogleStore.getState().duplicate(id);
         const ev = get().events.find((e) => e.id === id);
         if (!ev) return;
         const copy = { ...ev, id: uid("ev"), title: `${ev.title} (copy)`, requestId: undefined };
@@ -481,6 +497,37 @@ export const useAppStore = create<AppStore>()(
       resetDemoData: () => {
         set(createSeed());
         toast.success("Demo data restored");
+      },
+      // Keeps workspaces, holidays and settings; everything personal starts empty.
+      startFresh: (email) => {
+        const name = email?.split("@")[0] || "Me";
+        set({
+          events: [],
+          requests: [],
+          notifications: [],
+          documents: [],
+          timeEntries: [],
+          timer: { running: false, startedAt: null, project: "", task: "" },
+          invoices: [],
+          withdrawalMethods: [],
+          benefits: [],
+          profile: {
+            name,
+            email: email ?? "",
+            initials: name.slice(0, 2).toUpperCase(),
+            phone: "",
+            jobTitle: "",
+            department: "",
+            manager: "",
+            location: "",
+            startDate: "",
+            birthday: "",
+            address: "",
+            emergencyContact: "",
+            bio: "",
+          },
+        });
+        toast.success("Sample data cleared", { action: { label: "Undo", onClick: () => undo() } });
       },
     };
     },

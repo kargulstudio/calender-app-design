@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CopyIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,7 +19,9 @@ import { EVENT_COLORS } from "@/components/calendar/event-colors";
 import { parseTime, timeInputValue } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import type { CalEvent, EventColor } from "@/lib/types";
+import { useCalendarEvent } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
+import { useGoogleStore } from "@/stores/google-store";
 import { Field } from "./field";
 
 type Props = {
@@ -53,7 +55,8 @@ function EventForm({
   allDay,
   onDone,
 }: Omit<Props, "open" | "session" | "onClose"> & { onDone: () => void }) {
-  const existing = useAppStore((s) => s.events.find((e) => e.id === eventId));
+  const existing = useCalendarEvent(eventId);
+  const googleConnected = useGoogleStore((s) => s.status === "connected");
   const saveEvent = useAppStore((s) => s.saveEvent);
   const deleteEvent = useAppStore((s) => s.deleteEvent);
   const duplicateEvent = useAppStore((s) => s.duplicateEvent);
@@ -76,13 +79,15 @@ function EventForm({
 
   const error = !draft.allDay && draft.end <= draft.start ? "End time must be after the start time." : null;
   const linked = Boolean(existing?.requestId);
+  const readOnly = Boolean(existing?.readOnly);
+  const toGoogle = existing ? existing.source === "google" : googleConnected;
 
   return (
     <form
       className="contents"
       onSubmit={(e) => {
         e.preventDefault();
-        if (error || !draft.title.trim() || !draft.date) return;
+        if (readOnly || error || !draft.title.trim() || !draft.date) return;
         saveEvent({
           ...draft,
           id: existing?.id,
@@ -96,11 +101,17 @@ function EventForm({
       <DialogHeader className="gap-1.5">
         <DialogTitle className="t-16">{existing ? "Edit event" : "New event"}</DialogTitle>
         <DialogDescription className="t-14">
-          {linked ? "This event belongs to a leave request." : "Add it to your calendar — only you can see it."}
+          {linked
+            ? "This event belongs to a leave request."
+            : readOnly
+              ? "This event can only be changed in Google Calendar."
+              : toGoogle
+                ? "Saved to your Google Calendar."
+                : "Add it to your calendar — only you can see it."}
         </DialogDescription>
       </DialogHeader>
 
-      <div className="grid gap-4">
+      <fieldset disabled={readOnly} className="grid min-w-0 gap-4">
         <Field label="Title" htmlFor="ev-title">
           <Input
             id="ev-title"
@@ -171,29 +182,31 @@ function EventForm({
         <Field label="Notes" htmlFor="ev-note" hint="Short notes show on the event in the calendar.">
           <Textarea id="ev-note" rows={2} value={draft.note ?? ""} onChange={(e) => set("note", e.target.value)} />
         </Field>
-      </div>
+      </fieldset>
 
       <DialogFooter className="-mx-5 -mb-5 items-center bg-app px-5 py-3 sm:justify-between">
         <div className="flex gap-1">
           {existing && (
             <>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Delete event"
-                    onClick={() => {
-                      deleteEvent(existing.id);
-                      onDone();
-                    }}
-                  >
-                    <Trash2Icon className="text-danger" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Delete</TooltipContent>
-              </Tooltip>
+              {!readOnly && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Delete event"
+                      onClick={() => {
+                        deleteEvent(existing.id);
+                        onDone();
+                      }}
+                    >
+                      <Trash2Icon className="text-danger" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete</TooltipContent>
+                </Tooltip>
+              )}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -218,9 +231,17 @@ function EventForm({
           <Button type="button" onClick={onDone}>
             Cancel
           </Button>
-          <Button type="submit" variant="brand" disabled={!!error || !draft.title.trim()}>
-            {existing ? "Save" : "Create event"}
-          </Button>
+          {readOnly && existing?.url ? (
+            <Button variant="brand" asChild>
+              <a href={existing.url} target="_blank" rel="noreferrer">
+                <ExternalLinkIcon /> Open in Google
+              </a>
+            </Button>
+          ) : (
+            <Button type="submit" variant="brand" disabled={readOnly || !!error || !draft.title.trim()}>
+              {existing ? "Save" : "Create event"}
+            </Button>
+          )}
         </div>
       </DialogFooter>
     </form>

@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
+import { GoogleSync } from "@/components/google-sync";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-media-query";
@@ -22,6 +23,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
       <TooltipProvider delayDuration={400} skipDelayDuration={300}>
         <StoreHydrator />
+        <GoogleSync />
         {children}
         <Toaster position={isMobile ? "top-center" : "bottom-right"} />
       </TooltipProvider>

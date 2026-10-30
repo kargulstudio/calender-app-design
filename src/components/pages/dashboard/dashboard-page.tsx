@@ -35,6 +35,7 @@ import { computeLeaveStats, formatDays, plural } from "@/lib/leave";
 import type { CalEvent } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useNow, useToday } from "@/hooks/use-today";
+import { useCalendarEvents } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
 import { openOverlay } from "@/stores/overlay-store";
 import { Card, CardHeader, EmptyState, PageHeader, PageRoot, StatGrid, StatTile } from "@/components/pages/shared/page-chrome";
@@ -180,7 +181,7 @@ function StatRow() {
 function UpcomingCard() {
   const today = useToday();
   const now = useNow();
-  const events = useAppStore((s) => s.events);
+  const events = useCalendarEvents();
   const timeFormat = useAppStore((s) => s.settings.timeFormat);
 
   const nowMinutes = now ? new Date(now).getHours() * 60 + new Date(now).getMinutes() : 0;

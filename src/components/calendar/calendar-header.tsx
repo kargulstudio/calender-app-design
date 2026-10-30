@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarSyncIcon } from "lucide-react";
 import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { useToday } from "@/hooks/use-today";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore, type CalendarView } from "@/stores/calendar-store";
+import { useGoogleStore } from "@/stores/google-store";
 
 // Fixed segment geometry from the Figma so the active pill can slide.
 const VIEWS: { id: CalendarView; label: string; left: number; width: number; key: string }[] = [
@@ -51,6 +53,47 @@ function useRangeLabel(visible: string[]) {
   return { title, subtitle: `Week ${week} · ${formatRange(days[0], days[6])}` };
 }
 
+/** Connects Google Calendar, or refreshes it once connected. Hidden when no client ID is configured. */
+function GoogleSyncButton() {
+  const status = useGoogleStore((s) => s.status);
+  const syncing = useGoogleStore((s) => s.syncing);
+  const account = useGoogleStore((s) => s.account);
+  if (status === "unavailable") return null;
+
+  const label =
+    status === "connected"
+      ? syncing
+        ? "Syncing Google Calendar…"
+        : `Synced with ${account ?? "Google Calendar"} — refresh`
+      : status === "expired"
+        ? "Reconnect Google Calendar"
+        : status === "connecting"
+          ? "Connecting to Google…"
+          : "Connect Google Calendar";
+  const dot = status === "connected" ? "bg-success" : status === "expired" ? "bg-danger" : null;
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          size="icon"
+          aria-label={label}
+          disabled={status === "connecting"}
+          onClick={() => {
+            const google = useGoogleStore.getState();
+            void (status === "connected" ? google.refresh() : google.connect());
+          }}
+          className="relative shrink-0 max-md:size-8"
+        >
+          <CalendarSyncIcon className={cn("text-icon", syncing && "animate-pulse")} />
+          {dot && <span aria-hidden className={cn("absolute top-1 right-1 size-1.5 rounded-full", dot)} />}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  );
+}
+
 export function CalendarHeader({ days }: { days: string[] }) {
   const view = useCalendarStore((s) => s.view);
   const setView = useCalendarStore((s) => s.setView);
@@ -73,6 +116,8 @@ export function CalendarHeader({ days }: { days: string[] }) {
           <h2 className="t-16 max-w-full truncate text-fg">{title}</h2>
           <p className="t-14 salt max-w-full truncate text-fg-2">{subtitle}</p>
         </div>
+
+        <GoogleSyncButton />
 
         <Button size="sm" className="shrink-0 max-md:h-8" onClick={() => setDate(today)} aria-keyshortcuts="T">
           Today

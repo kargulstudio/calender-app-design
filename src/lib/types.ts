@@ -12,6 +12,12 @@ export type CalEvent = {
   note?: string;
   location?: string;
   requestId?: string;
+  /** Set on events synced from the connected Google Calendar. */
+  source?: "google";
+  /** Google events the app can't edit faithfully (multi-day, or owned by someone else). */
+  readOnly?: boolean;
+  /** Link to the event in Google Calendar. */
+  url?: string;
 };
 
 export type LeaveStatus = "approved" | "pending" | "declined" | "cancelled";

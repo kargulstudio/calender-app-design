@@ -5,6 +5,7 @@ import { WEEKDAYS_SHORT, dayOfWeek, formatTime, formatTimeRange, fromKey } from 
 import { cn } from "@/lib/utils";
 import type { CalEvent } from "@/lib/types";
 import { useNow, useToday } from "@/hooks/use-today";
+import { useCalendarEvents } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore } from "@/stores/calendar-store";
 import { openOverlay } from "@/stores/overlay-store";
@@ -130,7 +131,7 @@ function WeekStrip({ days }: { days: string[] }) {
 }
 
 export function TimeGrid({ days, strip }: { days: string[]; strip?: string[] }) {
-  const events = useAppStore((s) => s.events);
+  const events = useCalendarEvents();
   const timeFormat = useAppStore((s) => s.settings.timeFormat);
   const dayStartHour = useAppStore((s) => s.settings.dayStartHour);
   const moveEvent = useAppStore((s) => s.moveEvent);
@@ -243,7 +244,7 @@ export function TimeGrid({ days, strip }: { days: string[]; strip?: string[] }) 
       end: ev.end,
       grabOffset: minutes - ev.start,
       moved: false,
-      locked: Boolean(ev.requestId),
+      locked: Boolean(ev.requestId || ev.readOnly),
     });
   }
 
@@ -520,7 +521,7 @@ function EventBlock({
 }) {
   const height = minutesToPx(event.end - event.start) - 2;
   const compact = height < 44;
-  const locked = Boolean(event.requestId);
+  const locked = Boolean(event.requestId || event.readOnly);
   const time = formatTimeRange(event.start, event.end, timeFormat);
 
   return (

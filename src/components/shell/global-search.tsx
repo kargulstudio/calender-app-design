@@ -19,6 +19,7 @@ import {
 import { formatLong, formatShort, formatTimeRange } from "@/lib/dates";
 import { ALL_PAGES } from "@/lib/nav";
 import { useToday } from "@/hooks/use-today";
+import { useCalendarEvents } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore } from "@/stores/calendar-store";
 import { openOverlay, useOverlayStore } from "@/stores/overlay-store";
@@ -50,7 +51,7 @@ export function GlobalSearch() {
     if (open) setQuery("");
   }
   const close = useOverlayStore((s) => s.close);
-  const events = useAppStore((s) => s.events);
+  const events = useCalendarEvents();
   const requests = useAppStore((s) => s.requests);
   const documents = useAppStore((s) => s.documents);
   const invoices = useAppStore((s) => s.invoices);

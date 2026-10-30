@@ -5,6 +5,7 @@ import { WEEKDAYS_SHORT, dayOfWeek, formatTime, fromKey, isWeekend, monthGrid } 
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-media-query";
 import { useToday } from "@/hooks/use-today";
+import { useCalendarEvents } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore } from "@/stores/calendar-store";
 import { openOverlay } from "@/stores/overlay-store";
@@ -17,7 +18,7 @@ export function MonthView() {
   const setDate = useCalendarStore((s) => s.setDate);
   const setView = useCalendarStore((s) => s.setView);
   const openPopover = useCalendarStore((s) => s.openPopover);
-  const events = useAppStore((s) => s.events);
+  const events = useCalendarEvents();
   const holidays = useAppStore((s) => s.holidays);
   const { weekStartsOn, showWeekends, timeFormat } = useAppStore((s) => s.settings);
   const today = useToday();

@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { CalendarHeartIcon, CopyIcon, MapPinIcon, PencilIcon, PlaneIcon, Trash2Icon } from "lucide-react";
+import { CalendarHeartIcon, CopyIcon, ExternalLinkIcon, MapPinIcon, PencilIcon, PlaneIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { StatusBadge } from "@/components/time-off/status-badge";
 import { formatLong, formatTimeRange, formatWeekday } from "@/lib/dates";
 import { formatDuration } from "@/lib/dates";
+import { useCalendarEvent } from "@/hooks/use-calendar-events";
 import { useIsMobile } from "@/hooks/use-media-query";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore } from "@/stores/calendar-store";
@@ -18,7 +19,7 @@ import { deleteCalendarEvent } from "./delete-event";
 export function EventPopover() {
   const target = useCalendarStore((s) => s.popover);
   const close = useCalendarStore((s) => s.closePopover);
-  const event = useAppStore((s) => (target?.kind === "event" ? s.events.find((e) => e.id === target.id) : undefined));
+  const event = useCalendarEvent(target?.kind === "event" ? target.id : undefined);
   const holiday = useAppStore((s) => (target?.kind === "holiday" ? s.holidays.find((h) => h.id === target.id) : undefined));
   const request = useAppStore((s) => (event?.requestId ? s.requests.find((r) => r.id === event.requestId) : undefined));
   const timeFormat = useAppStore((s) => s.settings.timeFormat);
@@ -88,7 +89,13 @@ export function EventPopover() {
                 >
                   <PlaneIcon /> View request
                 </Button>
-              ) : (
+              ) : event.readOnly && event.url ? (
+                <Button size="sm" asChild>
+                  <a href={event.url} target="_blank" rel="noreferrer" onClick={close}>
+                    <ExternalLinkIcon /> Open in Google
+                  </a>
+                </Button>
+              ) : event.readOnly ? null : (
                 <Button
                   size="sm"
                   onClick={() => {
@@ -116,7 +123,7 @@ export function EventPopover() {
                 </TooltipTrigger>
                 <TooltipContent>Duplicate</TooltipContent>
               </Tooltip>
-              {!request && (
+              {!request && !event.readOnly && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button

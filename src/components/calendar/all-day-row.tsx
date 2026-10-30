@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useCalendarEvents } from "@/hooks/use-calendar-events";
 import { useAppStore } from "@/stores/app-store";
 import { useCalendarStore } from "@/stores/calendar-store";
 import { openOverlay } from "@/stores/overlay-store";
@@ -15,7 +16,7 @@ const ROW_PADDING = 5.5;
 
 /** The all-day lane above the time grid: holidays first, then all-day events. */
 export function AllDayRow({ days }: { days: string[] }) {
-  const events = useAppStore((s) => s.events);
+  const events = useCalendarEvents();
   const holidays = useAppStore((s) => s.holidays);
   const openPopover = useCalendarStore((s) => s.openPopover);
 
